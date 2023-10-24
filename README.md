@@ -5,4 +5,4 @@
 - SGD (Janita)
 - Neural_network (Mia)
 - Linear_regression (from project 1)
-- Logistic_regression (Max) test 
+- Logistic_regression (Max)
