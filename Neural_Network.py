@@ -31,21 +31,21 @@ class Neural_Network:
        
 
         self.z_o =  np.matmul(self.a_h, self.output_weights) + self.output_bias
-        self.a_o_h = np.heaviside(self.z_o,0)
-        print(self.a_o_h[:,0])
-        res = self.a_o_h[:,0]
-        acc = self.accuracy_score(res)
-        print(acc)
-        probabilities = self.sigmoid(self.z_o)
-        return probabilities
+        probebiliti = self.softmax(self.z_o)
+        return probebiliti 
+        
+    def softmax(self, input):
+        return np.exp(input)/sum(np.exp(input))
+
+        
 
     def predict(self):
         probabilities = self.feed_forward()
         self.prediction = np.argmax(probabilities, axis=1)
         return self.prediction
     
-    def accuracy_score(self, result):
-        return np.sum(self.target == result)/len(self.target)
+    def accuracy_score(self):
+        return np.sum(self.target == self.prediction)/len(self.target)
 
     
 
@@ -68,9 +68,10 @@ NN = Neural_Network(X_train, Y_train, 2)
 #NN = Neural_Network(input, target, 2)
 NN.setting_parameters()
 prediction = NN.predict()
+print(prediction)
+acc = NN.accuracy_score()
+print(acc)
 
-#print(prediction)
 
-#print(labels)
 
 
