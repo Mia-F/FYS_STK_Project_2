@@ -31,7 +31,7 @@ class StochasticGradientDecent:
 
     def fit(self, n_epoch, batch_size, learning_args):
         n_batch = self._n // batch_size
-        theta = np.random.randn(self._p, 1)
+        theta = np.random.randn(2, 1)
 
 
         for e in range(n_epoch):
@@ -40,10 +40,10 @@ class StochasticGradientDecent:
                 Xi = self._X[rand_idx: rand_idx+batch_size]
                 yi = self._y[rand_idx: rand_idx+batch_size]
                 gradients = (2/batch_size) * Xi.T @ ((Xi @ theta) - yi)
-                t = learning_args.copy()
-                t.append(e*n_batch + i)
-                eta = self.learning_schedule(t)
-                # eta = learning_args[1] / (t+learning_args[2])
+                # t = learning_args.copy()
+                t = e*n_batch + i
+                # eta = self.learning_schedule(t)
+                eta = 5 / (t+50)
                 theta = theta - eta*gradients
         return theta
 
@@ -62,10 +62,12 @@ def main():
     # y = np.array([0, 1 ,1, 1])
     # AND
     # y = np.array([0, 0 ,0, 1])
-    x = np.linspace(0, 1, 100).reshape(-1, 1)
-    y = 4 + 3*x + np.random.randn(100, 1)
-    model = StochasticGradientDecent(x, y)
-    learning_args = ['constant', 5, 50]
+    x = 2*np.random.rand(100, 1)
+    x = np.sort(x)
+    X = np.c_[np.ones_like(x), x]
+    y = 4+3*x+np.random.randn(100, 1)
+    model = StochasticGradientDecent(X, y)
+    learning_args = ['constant']
     theta = model.fit(n_epoch=50, batch_size=5, learning_args=learning_args)
     y_predict = model.predict(theta=theta)
 
