@@ -1,7 +1,6 @@
 import numpy as np
 from sklearn.linear_model import SGDClassifier
 
-
 def sigmoid(z):
     return 1 / (1 + np.exp(-z))
 
@@ -12,7 +11,7 @@ def logistic_derivative(X_batch, y_batch, theta):
 
 def stochastic_gradient_descent(X, y, derivative, batch_size=10, epochs=50, learning_rate=0.01):
     n = X.shape[0]
-    theta_sgd = np.random.randn(2, 1)
+    theta_sgd = np.random.randn(X.shape[1], 1)  # Adjusted to match feature count of X
     
     for epoch in range(epochs):
         indices = np.random.permutation(n)
@@ -27,11 +26,20 @@ def stochastic_gradient_descent(X, y, derivative, batch_size=10, epochs=50, lear
 
     return theta_sgd
 
-# weights = stochastic_gradient_descent(X_train, y_train, logistic_derivative, batch_size=10, epochs=50, learning_rate=0.01)
+# Logistic regression using SGD for XOR gate
+X = np.array([[1, 0, 0], [1, 0, 1], [1, 1, 0], [1, 1, 1]], dtype=np.float64)
+yXOR = np.array([0, 1, 1, 0])
+theta_XOR_sgd = stochastic_gradient_descent(X, yXOR, logistic_derivative, batch_size=1, epochs=10000, learning_rate=0.01)
 
-# Create an instance of SGDClassifier which applies Stochastic Gradient Descent
-sgd_clf = SGDClassifier(loss='log', learning_rate='constant', eta0=0.01, max_iter=1000)
+# Logistic regression using SGD for OR gate
+yOR = np.array([0, 1, 1, 1])
+theta_OR_sgd = stochastic_gradient_descent(X, yOR, logistic_derivative, batch_size=1, epochs=10000, learning_rate=0.01)
 
-# Fit the model to your data
-# sgd_clf.fit(X_train, y_train)
-# weights = sgd_logistic_regression(X_train, y_train, learning_rate=0.01, max_iter=1000)
+# Logistic regression using SGD for AND gate
+yAND = np.array([0, 0, 0, 1])
+theta_AND_sgd = stochastic_gradient_descent(X, yAND, logistic_derivative, batch_size=1, epochs=10000, learning_rate=0.01)
+
+# Print the results
+print("Theta for XOR gate using SGD:", theta_XOR_sgd.flatten())
+print("Theta for OR gate using SGD:", theta_OR_sgd.flatten())
+print("Theta for AND gate using SGD:", theta_AND_sgd.flatten())
